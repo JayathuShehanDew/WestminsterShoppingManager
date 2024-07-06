@@ -27,7 +27,3 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-
-src/Test.java
-products.csv
-src/gui/ShoppingCenter.java
