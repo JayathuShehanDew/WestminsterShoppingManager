@@ -5,6 +5,6 @@
 public class Main {
     public static void main(String[] args) {
         //running main interface
-        WestministerShoppingManager asd = new WestministerShoppingManager();
+        new WestministerShoppingManager();
     }
 }

@@ -2,6 +2,8 @@
 //UoW No: w1953207
 //Name  : D. K. J. S. Dewmina
 
+import utils.InputValidation;
+
 import java.io.*;
 import java.util.*;
 public class WestministerShoppingManager implements ShoppingManager, Serializable {
@@ -18,6 +20,7 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
         String exit="";
         //implementing console menu
         while(!exit.equals("5")){
+            System.out.println("_".repeat(50));
             System.out.println("""
                     Select option (enter number of selected option):
                         1.Add new product
@@ -26,14 +29,10 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
                         4.Save to File
                         5.Exit
                         6.Open GUI""");
+            System.out.println("_".repeat(50));
+            System.out.print("Enter your choice here : ");
             String option = scanner.nextLine();
-            //validating input
-            while(true) {
-                if(!option.equals("1") && !option.equals("2") && !option.equals("3") && !option.equals("4") && !option.equals("5") && !option.equals("6")){
-                    System.out.println("Invalid input!\nPlease try again.");
-                    option = scanner.nextLine();
-                }else {break;}
-            }
+
             //using a switch to navigate implementation of menu options
             switch (option){
                 case "1":{
@@ -72,6 +71,9 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
                     }
                     break;
                 }
+                default:
+                    System.out.println("Invalid input! Please try again...");
+                    waitTime();
             }
         }
         //exit message
@@ -81,117 +83,50 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
     //method used to get product details from user
     public void getProductDetails(){
         Scanner scanner = new Scanner(System.in);
-        System.out.println("""
-                Select type of product to add (enter number of selected type):
+        System.out.print("""
                     1.Clothing
-                    2.Electronics""");
-        String typeString = scanner.nextLine();
+                    2.Electronics
+                Select category of product to add (enter number of selected category) :\s""");
+
         //validating input
-        while(true) {
-            if(!typeString.equals("1") && !typeString.equals("2")){
-                System.out.println("Invalid input!\nPlease try again.");
-                typeString = scanner.nextLine();
-            }else {break;}
+        int category;
+        while (true){
+            category = InputValidation.intInputValidation();
+            if (!(category==1 || category==2))
+                System.out.print("Please Enter 1 or 2 only : ");
+            else
+                break;
         }
-        int type=Integer.parseInt(typeString);
+
         //collecting the detail common to all products first
-        System.out.println("Enter product Id: ");
-        String prdId = scanner.nextLine();
-        while(true) {
-            if(prdId.isEmpty()){
-                System.out.println("Invalid input!\nPlease try again.");
-                prdId = scanner.nextLine();
-            }else {break;}
-        }
-        System.out.println("Enter product name: ");
-        String prdNm = scanner.nextLine();
-        while(true) {
-            if(prdNm.isEmpty()){
-                System.out.println("Invalid input!\nPlease try again.");
-                prdNm = scanner.nextLine();
-            }else {break;}
-        }
-        System.out.println("Enter available stock amount: ");
-        int avlAmt;
-        //validating input
-        while (true) {
-            String avlAmtString = scanner.nextLine();
-            try {
-                avlAmt = Integer.parseInt(avlAmtString);
-                if(avlAmt<0){
-                    System.out.println("Invalid input!\nPlease enter a valid integer.");
-                }
-                else{break;}
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input!\nPlease enter a valid integer.");
-            }
-        }
-        System.out.println("Enter product unit price: ");
-        double prc;
-        //validating input
-        while (true) {
-            String prcString = scanner.nextLine();
-            try {
-                prc = Double.parseDouble(prcString);
-                if(prc<0){
-                    System.out.println("Invalid input!\nPlease enter a valid integer.");
-                }
-                else{break;}
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input!\nPlease enter a valid double.");
-            }
-        }
+        System.out.print("Enter product Id: ");
+        String prdId = checkID(products);
+        System.out.print("Enter product name: ");
+        String prdNm = InputValidation.stringInputValidation();
+        System.out.print("Enter available stock amount: ");
+        int avlAmt = InputValidation.intInputValidation();
+        System.out.print("Enter product unit price: ");
+        double prc = InputValidation.doubleInputValidation();
+
         //using switch to collect clothing and electronics unique data
-        switch (type){
+        switch (category){
             case 1: {
-                System.out.println("Enter clothing size: ");
-                String siz = scanner.nextLine();
-                while(true) {
-                    if(siz.isEmpty()){
-                        System.out.println("Invalid input!\nPlease try again.");
-                        siz = scanner.nextLine();
-                    }else {break;}
-                }
-                System.out.println("Enter clothing colour: ");
-                String color = scanner.nextLine();
-                while(true) {
-                    if(color.isEmpty()){
-                        System.out.println("Invalid input!\nPlease try again.");
-                        color = scanner.nextLine();
-                    }else {break;}
-                }
-                System.out.println("Enter clothing brand: ");
-                String brnd = scanner.nextLine();
-                while(true) {
-                    if(brnd.isEmpty()){
-                        System.out.println("Invalid input!\nPlease try again.");
-                        brnd = scanner.nextLine();
-                    }else {break;}
-                }
+                System.out.print("Enter clothing size: ");
+                String siz = InputValidation.stringInputValidation();
+                System.out.print("Enter clothing colour: ");
+                String color = InputValidation.stringInputValidation();
+                System.out.print("Enter clothing brand: ");
+                String brnd = InputValidation.stringInputValidation();
+
                 //creating and adding new clothing to system
                 addNewProduct(prdId, prdNm, avlAmt, prc, siz, color, brnd);
                 break;
             }
             case 2: {
-                System.out.println("Enter electronics brand: ");
-                String brnd = scanner.nextLine();
-                while(true) {
-                    if(brnd.isEmpty()){
-                        System.out.println("Invalid input!\nPlease try again.");
-                        brnd = scanner.nextLine();
-                    }else {break;}
-                }
-                System.out.println("Enter warranty period (\"x years\", \"y months\" or \" x weeks\"): ");
-                String warntPrd;
-                while(true){
-                    warntPrd = scanner.nextLine();
-                    //validating user input meets requirements
-                    if((warntPrd.contains("years" )|| warntPrd.contains("months"))||(warntPrd.contains("weeks" ))){
-                        break;
-                    }else{
-                        System.out.println("Invalid input!\nPlease enter in \"x years\", \"y months\" or \" x weeks\" form.");
-                    }
-                }
+                System.out.print("Enter electronics brand: ");
+                String brnd = InputValidation.stringInputValidation();
+                System.out.print("Enter warranty period (\"x years\", \"y months\" or \"z weeks\"): ");
+                String warntPrd = InputValidation.warrantyValidation();
                 //creating and adding new electronics to system
                 addNewProduct(prdId, prdNm, avlAmt, prc, brnd, warntPrd);
                 break;
@@ -390,6 +325,37 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
     public static ArrayList<Product> getProductsArray(){
         Collections.sort(products, Comparator.comparing(Product::getProductId));
         return products;
+    }
+
+    public void waitTime(){
+        try {
+            Thread.sleep(1000); // Pause for 1 second (1000 milliseconds)
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String checkID(ArrayList<Product> products){
+        Scanner scanner = new Scanner(System.in);
+        String productID;
+
+        do {
+            productID = scanner.nextLine();
+            boolean isValid = true;
+
+            for (Product product : products) {
+                if (Objects.equals(product.getProductId(), productID) || productID.isEmpty()) {
+                    isValid = false;
+                    break;
+                }
+            }
+
+            if (!isValid) {
+                System.out.print("Product ID is already taken. Please enter a different ID: ");
+            } else {
+                return productID;
+            }
+        } while (true);
     }
 }
 
