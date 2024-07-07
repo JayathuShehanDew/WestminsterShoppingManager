@@ -10,7 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-//implementing main GUI of the system
+//implementing the main GUI of the system
 public class GUI extends JFrame implements ActionListener{
     //encapsulating and initializing class attributes
     private static ArrayList<Product> productList;
@@ -30,7 +30,7 @@ public class GUI extends JFrame implements ActionListener{
 //creating main JFrame of the GUI
     JFrame mainFrame = new JFrame();
     public GUI(User currentUser){
-        //getting products array and user array
+        //getting product array and user array
     productList=WestministerShoppingManager.getProductsArray();
     user=currentUser;
 //setting up main frame
@@ -41,21 +41,21 @@ public class GUI extends JFrame implements ActionListener{
         mainFrame.setLayout(null);
         //making frame un-resizable for easier handling of components
         mainFrame.setResizable(false);
-        //dividing main frame into two, upper and lower parts for better implementation
+        //dividing the main frame into two, upper and lower parts for better implementation
         JPanel topPanel = new JPanel();
         topPanel.setPreferredSize(new Dimension(700,350));
         topPanel.setBounds(0,0,700,350);
         topPanel.setLayout(null);
-        //adding top panel to main frame
+        //adding a top panel to the main frame
         mainFrame.add(topPanel);
-        //adding "select product category" label to top panel
+        //adding "select product category" label to a top panel
         topPanel.add(label1);
         label1.setBounds(10,25,200,20);
         //creating combo box for category options
         String[] prdTypes = {"All","Electronics","Clothing"};
         productType = new JComboBox(prdTypes);
         productType.addActionListener(this);
-        //adding combobox to top panel
+        //adding combo box to a top panel
         topPanel.add(productType);
         productType.setBounds(220,20,200,30);
         //adding shopping cart button to top panel
@@ -74,10 +74,10 @@ public class GUI extends JFrame implements ActionListener{
         tableModel.addColumn("Info");
         //adding table rows
         addTableRows(tableShow);
-        //adding table model as a JTable
+        //adding a table model as a JTable
         productsTable = new JTable(tableModel);
         productsTable.setRowHeight(60);
-        //creating Jscrollpane JTable
+        //creating Scrollable JTable
         JScrollPane scrollPane = new JScrollPane(productsTable);
         topPanel.add(scrollPane);
         scrollPane.setBounds(10,60,670,280);
@@ -114,12 +114,12 @@ public class GUI extends JFrame implements ActionListener{
         textArea.setBounds(30,35,600,200);
         textArea.setFont(new Font("Calibri",Font.PLAIN,18));
         textArea.setBackground(null);
-        //adding add to shopping cart button to bottom panel
+        //adding add to shopping cart button to a bottom panel
         bottomPanel.add(addToShoppingCartBtn);
         addToShoppingCartBtn.setPreferredSize(new Dimension(100,20));
         addToShoppingCartBtn.setFocusable(false);
         addToShoppingCartBtn.setBounds(200,280,300,30);
-        //adding event listeners to get user input when selecting add to cart option
+        //adding event listeners to get user input when selecting add to a cart option
         addToShoppingCartBtn.addActionListener(this);
     }
     //creating actionPerformed class to respond to user inputs

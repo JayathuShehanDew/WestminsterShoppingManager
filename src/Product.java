@@ -3,7 +3,7 @@
 //Name  : D. K. J. S. Dewmina
 
 import java.io.Serializable;
-//creating product super class. implementing Serializable to accommodate save and load features
+//creating product superclass. implementing Serializable to accommodate save and load features
 public abstract class Product implements Serializable {
     //encapsulating class data
     private String productId;
@@ -18,7 +18,7 @@ public abstract class Product implements Serializable {
         availableAmount = avlAmt;
         price = prc;
     }
-    //creating method to get price of products
+    //creating method to get the price of products
     public double getPrice(){
         return this.price;
     }
@@ -26,7 +26,7 @@ public abstract class Product implements Serializable {
     public String getProductId(){
         return this.productId;
     }
-    //creating method to get available amount of products
+    //creating method to get available number of products
     public int getAvailableAmount() {
         return this.availableAmount;
     }
@@ -34,7 +34,7 @@ public abstract class Product implements Serializable {
     public String getProductName(){
         return this.productName;
     }
-    //creating method to record multiple selections of same product
+    //creating method to record multiple selections of the same product
     public void productBought(){
         quantityBought++;
     }

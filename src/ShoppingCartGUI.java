@@ -16,12 +16,12 @@ public class ShoppingCartGUI extends JFrame {
     private User user;
     private ArrayList<Product> tempArray;
     private boolean itemDiscount=false;
-    //creating main method of the shopping cart GUI.
-    //gets user account of current user
+    //creating the main method of the shopping cart GUI.
+    //gets a user account of current user
     ShoppingCartGUI(User gotUser){
         //implementing user to user attribute
         user = gotUser;
-        //creating main frame
+        //creating the main frame
         JFrame mainFrame = new JFrame();
         mainFrame.setTitle("Shopping Cart");
         mainFrame.setSize(700,700);
@@ -54,15 +54,15 @@ public class ShoppingCartGUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(productsTable);
         mainFrame.add(scrollPane);
         scrollPane.setBounds(10,10,670,350);
-        //changing first column to text area type
+        //changing the first column to a text area type
         productsTable.getColumnModel().getColumn(0).setCellRenderer(new TextAreaRenderer());
-        //adding text area displaying price details to main frame
+        //adding text area displaying price details to the main frame
         mainFrame.add(textArea);
         textArea.setBounds(30,370,600,270);
         textArea.setFont(new Font("Calibri",Font.PLAIN,18));
         textArea.setText(billtext(user));
     }
-    //creating method to generate the text related to total bill
+    //creating method to generate the text related to a total bill
     public String billtext(User user){
         String total ="                                          Total      "+user.getCart().getTotalPrice()+"\u00A3";
         String frtDis="\n                  First Purchase Discount (10%)     -"+(user.getCart().getTotalPrice()*0.1)+"\u00A3";
@@ -85,8 +85,8 @@ public class ShoppingCartGUI extends JFrame {
         }
         return finString;
     }
-    //methods related to changing JTable column to textArea. Reference included below,
-//    docs.oracle.com. (n.d.). TableCellRenderer (Java Platform SE 8 ).
+    //Methods related to changing JTable column to textArea. Reference included below,
+//    docs.oracle.com. (n.d.). TableCellRenderer (Java Platform SE 8).
 //    [online] Available at:
 //    https://docs.oracle.com/javase/8/docs/api/javax/swing/table/TableCellRenderer.html [Accessed 12 Jan. 2024].
     class TextAreaRenderer extends JTextArea implements TableCellRenderer {

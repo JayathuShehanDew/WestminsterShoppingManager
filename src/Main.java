@@ -4,7 +4,7 @@
 
 public class Main {
     public static void main(String[] args) {
-        //running main interface
+        //running the main interface
         WestministerShoppingManager asd = new WestministerShoppingManager();
     }
 }
