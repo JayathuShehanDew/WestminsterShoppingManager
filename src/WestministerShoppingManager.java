@@ -26,7 +26,6 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
                         4.Save to File
                         5.Exit
                         6.Open GUI""");
-            System.out.print("What is your choice : ");
             String option = scanner.nextLine();
             //validating input
             while(true) {
@@ -38,7 +37,7 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
             //using a switch to navigate implementation of menu options
             switch (option){
                 case "1":{
-                    //making sure no more than 50 products in a system
+                    //making sure no more than 50 products in system
                     if(products.size()<50){
                         getProductDetails();
                     }else {
@@ -169,7 +168,7 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
                         brnd = scanner.nextLine();
                     }else {break;}
                 }
-                //creating and adding new clothing to a system
+                //creating and adding new clothing to system
                 addNewProduct(prdId, prdNm, avlAmt, prc, siz, color, brnd);
                 break;
             }
@@ -193,7 +192,7 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
                         System.out.println("Invalid input!\nPlease enter in \"x years\", \"y months\" or \" x weeks\" form.");
                     }
                 }
-                //creating and adding new electronics to a system
+                //creating and adding new electronics to system
                 addNewProduct(prdId, prdNm, avlAmt, prc, brnd, warntPrd);
                 break;
             }
@@ -224,12 +223,11 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
         Electronics electronic = new Electronics(prdId, prdNm, avlAmt, prc, brnd, warntPrd);
         products.add(electronic);
     }
-//    Method that can be used to directly enter a given product to a product array.
-//    Not used in the current version.
-//    Public void addNewProduct(Product product){
+//    method that can be used to directly enter given product to products array. Not used in current version.
+//    public void addNewProduct(Product product){
 //        products.add(product);
 //    }
-    //creating method to remove products from a product array based on the input product ID
+    //creating method to remove products from products array based on the input product ID
     public void deleteProduct(String productId) {
         boolean productDeleted=false;
         for(int i=0; i<products.size(); i++){
@@ -278,7 +276,7 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
     public User userAccount(){
         User userAccount=null;
         Scanner scanner = new Scanner(System.in);
-        //giving user the option to log in to previously registered accounts and create new accounts
+        //giving user the option to login to previously registered accounts and create new accounts
         System.out.println("""
                 Select option:
                     1.Login to user account
@@ -331,19 +329,19 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
                 break;
             }
         }
-        //informing user of an account not existing
+        //informing user of account not existing
         if (!accFound) {
             System.out.println("Account not found!");
             user=null;
         }
         return user;
     }
-    //creating method to create a user account
+    //creating method to create user account
     public User userCreation(){
         Scanner scanner = new Scanner(System.in);
         //getting new username and password
         String usrNm;
-        //making sure of the availability of username
+        //making sure of availability of username
         while(true){
             System.out.println("Enter new username:");
             usrNm = scanner.nextLine();
@@ -360,7 +358,7 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
         //getting new password
         System.out.println("Enter new password:");
         String pswrd = scanner.nextLine();
-        //creating a new account
+        //creating new account
         User newUser = new User(usrNm,pswrd);
         System.out.println("Successfully create account!\n" +
                 "   Account username is "+usrNm+
@@ -388,7 +386,7 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
         }
         return users;
     }
-    //creating method to sort products based on product ID and return a sorted array
+    //creating method to sort products based on product ID and return sorted array
     public static ArrayList<Product> getProductsArray(){
         Collections.sort(products, Comparator.comparing(Product::getProductId));
         return products;
