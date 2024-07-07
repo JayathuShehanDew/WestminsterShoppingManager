@@ -1,6 +1,6 @@
-//IIT No: 20220334
-//UoW No: w1953208
-//Name  : H.S.C.Samarasinghe
+//IIT No: 20220332
+//UoW No: w1953207
+//Name  : D. K. J. S. Dewmina
 
 //implementing electronics child class of product class
 public class Electronics extends Product{
