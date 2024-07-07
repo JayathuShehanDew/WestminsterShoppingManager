@@ -1,30 +1,10 @@
-import main.WestminsterShoppingManager;
-
-import javax.swing.*;
-import java.util.Scanner;
+//IIT No: 20220334
+//UoW No: w1953208
+//Name  : H.S.C.Samarasinghe
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner=new Scanner(System.in);
-        String choice;
-        do{
-            System.out.println("-".repeat(40));
-            System.out.printf("%32s%n", "Online Shopping Center");
-            System.out.println("-".repeat(40));
-            System.out.println("1. Login as Shopping Manager");
-            System.out.println("2. Login as Customer");
-            System.out.println("3. Exit");
-
-            System.out.print("Enter your choice : ");
-            choice=scanner.next();
-
-            switch (choice) {
-                case "1" -> new WestminsterShoppingManager().displayMenu();
-                case "2" -> System.out.println("HI");
-                case "3" -> System.out.println("Exiting...");
-                default -> System.out.println("Invalid choice. Please enter a valid option.");
-            }
-        }while (!choice.equals("3"));
+        //running main interface
+        WestministerShoppingManager asd = new WestministerShoppingManager();
     }
-
 }
