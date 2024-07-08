@@ -1,44 +1,49 @@
-//IIT No: 20220332
-//UoW No: w1953207
-//Name  : D. K. J. S. Dewmina
-
-//implementing electronics child class of product class
 import java.io.Serializable;
 import java.util.ArrayList;
-//implementing user class representing the users
+
 public class User implements Serializable {
-    //encapsulating class attributes
+    private static final long serialVersionUID = 1506900153016872262L;
+
+    // encapsulating class attributes
     private String username;
     private String password;
     private ShoppingCart cart;
-    private boolean firstTime=false;
-    //creating class constructor
-    public User(String usernme, String passwrd){
-        username = usernme;
-        password = passwrd;
-        cart = new ShoppingCart();
+    private boolean firstTime = false;
+
+    // creating class constructor
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+        this.cart = new ShoppingCart();
     }
-    //creating getter and setters
-    public String getPassword(){
+
+    // creating getters and setters
+    public String getPassword() {
         return this.password;
     }
-    public String getUsername(){
+
+    public String getUsername() {
         return this.username;
     }
-    public void addToUserCart(Product product){
+
+    public void addToUserCart(Product product) {
         cart.addToCart(product);
     }
-    public ArrayList<Product> getUserCartProductList(){
+
+    public ArrayList<Product> getUserCartProductList() {
         return cart.getCartProductsArray();
     }
-    //creating methods to manipulate boolean firstTime to facilitate discount calculations
-    public void changeFirstTime(){
-        this.firstTime=true;
+
+    // creating methods to manipulate boolean firstTime to facilitate discount calculations
+    public void changeFirstTime() {
+        this.firstTime = true;
     }
-    public boolean userFirstTime(){
+
+    public boolean userFirstTime() {
         return firstTime;
     }
-    public ShoppingCart getCart(){
+
+    public ShoppingCart getCart() {
         return this.cart;
     }
 }

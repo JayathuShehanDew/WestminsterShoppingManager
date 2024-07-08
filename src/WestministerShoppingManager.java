@@ -80,9 +80,9 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
         System.out.println("Thank you for using this app!\nHave a nice day :)");
     }
 
+// ---------------- 1.Add new product ----------------
     //method used to get product details from user
     public void getProductDetails(){
-        Scanner scanner = new Scanner(System.in);
         System.out.print("""
                     1.Clothing
                     2.Electronics
@@ -134,20 +134,7 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
         }
         System.out.println("New product added!");
     }
-    //implementing delete method to remove added products
-    public void getDeleteProductDetails(){
-        Scanner scanner = new Scanner(System.in);
-        //checking whether product to be deleted exists
-        if(products.isEmpty()){
-            System.out.println("No products to delete!");
-        }
-        else {
-            System.out.println("Enter product Id of product to delete: ");
-            String productId = scanner.nextLine();
 
-            deleteProduct(productId);
-        }
-    }
     //method to create and add clothing to products array
     public void addNewProduct(String prdId, String prdNm, int avlAmt, double prc, String siz, String color, String brnd) {
         Clothing cloth = new Clothing(prdId, prdNm, avlAmt, prc, siz, color, brnd);
@@ -158,10 +145,22 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
         Electronics electronic = new Electronics(prdId, prdNm, avlAmt, prc, brnd, warntPrd);
         products.add(electronic);
     }
-//    method that can be used to directly enter given product to products array. Not used in current version.
-//    public void addNewProduct(Product product){
-//        products.add(product);
-//    }
+
+// ---------------- 2.Delete product ----------------
+    //implementing delete method to remove added products
+    public void getDeleteProductDetails(){
+        Scanner scanner = new Scanner(System.in);
+        //checking whether product to be deleted exists
+        if(products.isEmpty()){
+            System.out.println("No products to delete!");
+        }
+        else {
+            System.out.print("Enter product Id of product to delete: ");
+            String productId = scanner.nextLine();
+
+            deleteProduct(productId);
+        }
+    }
     //creating method to remove products from products array based on the input product ID
     public void deleteProduct(String productId) {
         boolean productDeleted=false;
@@ -178,6 +177,8 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
             System.out.println("Product "+productId+" not found!");
         }
     }
+
+// ---------------- 3.Print product list ----------------
     //creating method to print products array to string
     public void printProductList() {
         Collections.sort(products, Comparator.comparing(Product::getProductId));
@@ -188,6 +189,8 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
             System.out.println(product.toString());
         }
     }
+
+// ---------------- 4.Save to File ----------------
     //creating method to save products array to outside file
     public void saveToFile(ArrayList<Product> products, String fileName) {
         try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))){
@@ -207,43 +210,45 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
         }
         return products;
     }
+
+// ---------------- 6.Open GUI ----------------
     //creating method to handle user account related data
     public User userAccount(){
         User userAccount=null;
         Scanner scanner = new Scanner(System.in);
-        //giving user the option to login to previously registered accounts and create new accounts
-        System.out.println("""
-                Select option:
-                    1.Login to user account
-                    2.Create new account""");
-        String option = scanner.nextLine();
-        //validating user input
         while(true) {
-            if(!option.equals("1") && !option.equals("2")){
-                System.out.println("Invalid input!\nPlease try again.");
-                option = scanner.nextLine();
-            }else {break;}
-        }
-        //using switch to implement user login and account creation
-        switch (option){
-            case "1": {
-                userAccount = userLogin();
-                break;
+            //giving user the option to login to previously registered accounts and create new accounts
+            System.out.println("""
+                    Select option:
+                        1.Login to user account
+                        2.Create new account""");
+            System.out.print("Enter your choice : ");
+            String option = scanner.nextLine();
+            //using switch to implement user login and account creation
+            switch (option) {
+                case "1": {
+                    userAccount = userLogin();
+                    break;
+                }
+                case "2": {
+                    userAccount = userCreation();
+                    userAccount.changeFirstTime();
+                    break;
+                }
+                default:
+                    System.out.println("Invalid input! Please try again...");
             }
-            case "2":{
-                userAccount = userCreation();
-                userAccount.changeFirstTime();
+            if (option.equals("1") || option.equals("2"))
                 break;
-            }
         }
         return userAccount;
     }
     //creating user login method
     public User userLogin(){
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter username:");
+        System.out.print("Enter username:");
         String usrNm = scanner.nextLine();
-        System.out.println("Enter password:");
+        System.out.print("Enter password:");
         String pswrd = scanner.nextLine();
 
         boolean loggedIn=false;
@@ -278,7 +283,7 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
         String usrNm;
         //making sure of availability of username
         while(true){
-            System.out.println("Enter new username:");
+            System.out.print("Enter new username:");
             usrNm = scanner.nextLine();
             boolean usrAva = true;
             for(int i=0;i<users.size();i++){
@@ -291,7 +296,7 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
             }else{break;}
         }
         //getting new password
-        System.out.println("Enter new password:");
+        System.out.print("Enter new password:");
         String pswrd = scanner.nextLine();
         //creating new account
         User newUser = new User(usrNm,pswrd);

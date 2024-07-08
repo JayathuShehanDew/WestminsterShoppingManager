@@ -37,7 +37,7 @@ public class GUI extends JFrame implements ActionListener{
         mainFrame.setTitle("Westminster Shopping Centre");
         mainFrame.setSize(700,700);
         mainFrame.setVisible(true);
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainFrame.setLayout(null);
         //making frame un-resizable for easier handling of components
         mainFrame.setResizable(false);
