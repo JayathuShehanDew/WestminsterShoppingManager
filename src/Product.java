@@ -3,30 +3,30 @@
 //Name  : D. K. J. S. Dewmina
 
 import java.io.Serializable;
-//creating product super class. implementing Serializable to accommodate save and load features
+//creating product superclass. implementing Serializable to accommodate save and load features
 public abstract class Product implements Serializable {
     //encapsulating class data
-    private String productId;
-    private String productName;
-    private int availableAmount;
-    private double price;
+    private final String productID;
+    private final String productName;
+    private final int availableAmount;
+    private final double price;
     private int quantityBought=0;
     //creating class constructor
-    public Product(String prdId, String prdNm, int avlAmt, double prc){
-        productId = prdId;
-        productName = prdNm;
-        availableAmount = avlAmt;
-        price = prc;
+    public Product(String productID, String productName, int availableAmount, double price){
+        this.productID = productID;
+        this.productName = productName;
+        this.availableAmount = availableAmount;
+        this.price = price;
     }
-    //creating method to get price of products
+    //creating method to get the price of products
     public double getPrice(){
         return this.price;
     }
     //creating method to get product ID of products
-    public String getProductId(){
-        return this.productId;
+    public String getProductID(){
+        return this.productID;
     }
-    //creating method to get available amount of products
+    //creating method to get available number of products
     public int getAvailableAmount() {
         return this.availableAmount;
     }
@@ -34,7 +34,7 @@ public abstract class Product implements Serializable {
     public String getProductName(){
         return this.productName;
     }
-    //creating method to record multiple selections of same product
+    //creating method to record multiple selections of the same product
     public void productBought(){
         quantityBought++;
     }
@@ -49,7 +49,7 @@ public abstract class Product implements Serializable {
     //creating new toString method
     @Override
     public String toString() {
-        return "Product Id      : " + this.getProductId() + "\n" +
+        return "Product Id      : " + this.getProductID() + "\n" +
                 "Product name    : " + this.getProductName() + "\n" +
                 "Available stock : " + this.getAvailableAmount() + "\n" +
                 "Unit price      : " + this.getPrice() + "\n";

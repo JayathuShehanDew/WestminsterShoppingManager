@@ -8,7 +8,7 @@ import java.util.ArrayList;
 //creating shoppingCart class to record purchase data
 public class ShoppingCart implements Serializable {
     //encapsulating class attributes
-    private ArrayList<Product> cartProducts;
+    private final ArrayList<Product> cartProducts;
     //creating getters and setters
     public ShoppingCart(){
         cartProducts = new ArrayList<>();
@@ -20,10 +20,10 @@ public class ShoppingCart implements Serializable {
     public void addToCart(Product product){
         boolean bought=false;
         //checking whether the same product has been bought before
-        for(int i=0; i < cartProducts.size(); i++){
-            if(cartProducts.get(i) == product){
+        for (Product cartProduct : cartProducts) {
+            if (cartProduct == product) {
                 //if product bought before increase bought quantity
-                cartProducts.get(i).productBought();
+                cartProduct.productBought();
                 bought = true;
             }
         }
@@ -42,17 +42,16 @@ public class ShoppingCart implements Serializable {
         }
         return total;
     }
-    //checking eligibility of getting discount for buying 3 or more products of same category
-    public boolean getDiscountElligibility(){
+    //checking eligibility of getting discount for buying 3 or more products of the same category
+    public boolean getDiscountEligibility(){
         boolean discount = false;
         int clothNum=0;
         int elcNum=0;
-        for (int i=0; i<cartProducts.size(); i++){
-            if(cartProducts.get(i) instanceof Clothing){
-                clothNum=cartProducts.get(i).getQuantityBought()+clothNum;
-            }
-            else{
-                elcNum=cartProducts.get(i).getQuantityBought()+clothNum;
+        for (Product cartProduct : cartProducts) {
+            if (cartProduct instanceof Clothing) {
+                clothNum = cartProduct.getQuantityBought() + clothNum;
+            } else {
+                elcNum = cartProduct.getQuantityBought() + clothNum;
             }
         }
         if(clothNum>2 || elcNum>2){
@@ -62,16 +61,16 @@ public class ShoppingCart implements Serializable {
     }
     //method to calculate final price with discounts
     public double getFinalPrice(User user){
-        boolean firsttime= user.userFirstTime();
-        boolean discount=user.getCart().getDiscountElligibility();
+        boolean firstTime= user.userFirstTime();
+        boolean discount=user.getCart().getDiscountEligibility();
         double total=getTotalPrice();
-        if(discount && !firsttime) {
+        if(discount && !firstTime) {
             total = total * 0.8;
         }
-        if(discount && firsttime){
+        if(discount && firstTime){
             total = total * 0.7;
         }
-        if(!discount && firsttime){
+        if(!discount && firstTime){
             total = total * 0.9;
         }
         return total;

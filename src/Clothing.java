@@ -5,15 +5,15 @@
 //implementing electronics child class of product class
 public class Clothing extends Product{
     //encapsulating class attributes
-    private String size;
-    private String colour;
-    private String brand;
+    private final String size;
+    private final String colour;
+    private final String brand;
     //creating class constructor
-    public Clothing(String prdId, String prdNm, int avlAmt, double prc, String siz, String color, String brnd) {
+    public Clothing(String prdId, String prdNm, int avlAmt, double prc, String size, String colour, String brand) {
         super(prdId, prdNm, avlAmt, prc);
-        size = siz;
-        colour = color;
-        brand = brnd;
+        this.size = size;
+        this.colour = colour;
+        this.brand = brand;
     }
     //overriding superclass methods
     @Override
@@ -26,7 +26,7 @@ public class Clothing extends Product{
     }
     @Override
     public String getProductDetails(){
-        return "Product Id: "+getProductId()+"\nCategory: Clothing\n" +
+        return "Product Id: "+ getProductID()+"\nCategory: Clothing\n" +
                 "Name: "+getProductName()+"\nSize: "+size+"\nColour: "+colour+"\n" +
                 "Brand: "+brand+"\nItems Available: "+getAvailableAmount();
     }

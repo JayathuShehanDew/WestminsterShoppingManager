@@ -1,13 +1,15 @@
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class User implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1506900153016872262L;
 
     // encapsulating class attributes
-    private String username;
-    private String password;
-    private ShoppingCart cart;
+    private final String username;
+    private final String password;
+    private final ShoppingCart cart;
     private boolean firstTime = false;
 
     // creating class constructor

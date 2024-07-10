@@ -4,18 +4,17 @@
 
 import utils.InputValidation;
 
-import java.io.*;
 import java.util.*;
-public class WestministerShoppingManager implements ShoppingManager, Serializable {
+public class WestminsterShoppingManager implements ShoppingManager {
     //initializing static arraylists to hold entered products and registered users.
     //encapsulating class data
     private static ArrayList<Product> products;
     private static ArrayList<User> users;
-    public WestministerShoppingManager(){
+    public WestminsterShoppingManager(){
         Scanner scanner = new Scanner(System.in);
         //loading saved product and user data
-        products = loadFromFile("products.dat");
-        users = loadAccounts();
+        products = SerializationAndDeserialization.loadFromFile("products.dat");
+        users = SerializationAndDeserialization.loadAccounts();
 
         String exit="";
         //implementing console menu
@@ -32,11 +31,12 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
             System.out.println("_".repeat(50));
             System.out.print("Enter your choice here : ");
             String option = scanner.nextLine();
+            System.out.println();
 
             //using a switch to navigate implementation of menu options
             switch (option){
                 case "1":{
-                    //making sure no more than 50 products in system
+                    //making sure no more than 50 products in a system
                     if(products.size()<50){
                         getProductDetails();
                     }else {
@@ -52,11 +52,11 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
                 }
                 case "3":{
                     printProductList();
+                    waitTime(3000);
                     break;
                 }
                 case "4":{
-                    saveToFile(products,"products.dat");
-                    System.out.println("Saved successfully.");
+                    SerializationAndDeserialization.saveFile(products, "products.dat");
                     break;
                 }
                 case "5":{
@@ -73,7 +73,7 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
                 }
                 default:
                     System.out.println("Invalid input! Please try again...");
-                    waitTime();
+                    waitTime(3000);
             }
         }
         //exit message
@@ -100,13 +100,13 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
 
         //collecting the detail common to all products first
         System.out.print("Enter product Id: ");
-        String prdId = checkID(products);
+        String productID = checkID(products);
         System.out.print("Enter product name: ");
-        String prdNm = InputValidation.stringInputValidation();
+        String productName = InputValidation.stringInputValidation();
         System.out.print("Enter available stock amount: ");
-        int avlAmt = InputValidation.intInputValidation();
+        int availableAmount = InputValidation.intInputValidation();
         System.out.print("Enter product unit price: ");
-        double prc = InputValidation.doubleInputValidation();
+        double price = InputValidation.doubleInputValidation();
 
         //using switch to collect clothing and electronics unique data
         switch (category){
@@ -116,19 +116,19 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
                 System.out.print("Enter clothing colour: ");
                 String color = InputValidation.stringInputValidation();
                 System.out.print("Enter clothing brand: ");
-                String brnd = InputValidation.stringInputValidation();
+                String brand = InputValidation.stringInputValidation();
 
-                //creating and adding new clothing to system
-                addNewProduct(prdId, prdNm, avlAmt, prc, siz, color, brnd);
+                //creating and adding new clothing to a system
+                addNewProduct(productID, productName, availableAmount, price, siz, color, brand);
                 break;
             }
             case 2: {
                 System.out.print("Enter electronics brand: ");
-                String brnd = InputValidation.stringInputValidation();
+                String brand = InputValidation.stringInputValidation();
                 System.out.print("Enter warranty period (\"x years\", \"y months\" or \"z weeks\"): ");
-                String warntPrd = InputValidation.warrantyValidation();
-                //creating and adding new electronics to system
-                addNewProduct(prdId, prdNm, avlAmt, prc, brnd, warntPrd);
+                String warrantyPeriod = InputValidation.warrantyValidation();
+                //creating and adding new electronics to a system
+                addNewProduct(productID, productName, availableAmount, price, brand, warrantyPeriod);
                 break;
             }
         }
@@ -136,13 +136,13 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
     }
 
     //method to create and add clothing to products array
-    public void addNewProduct(String prdId, String prdNm, int avlAmt, double prc, String siz, String color, String brnd) {
-        Clothing cloth = new Clothing(prdId, prdNm, avlAmt, prc, siz, color, brnd);
+    public void addNewProduct(String productID, String productName, int availableAmount, double price, String size, String colour, String brand) {
+        Clothing cloth = new Clothing(productID, productName, availableAmount, price, size, colour, brand);
         products.add(cloth);
     }
     //method to create and add electronics to products array
-    public void addNewProduct(String prdId, String prdNm, int avlAmt, double prc, String brnd, String warntPrd) {
-        Electronics electronic = new Electronics(prdId, prdNm, avlAmt, prc, brnd, warntPrd);
+    public void addNewProduct(String prdId, String prdNm, int avlAmt, double prc, String brand, String warrantyPeriod) {
+        Electronics electronic = new Electronics(prdId, prdNm, avlAmt, prc, brand, warrantyPeriod);
         products.add(electronic);
     }
 
@@ -161,11 +161,11 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
             deleteProduct(productId);
         }
     }
-    //creating method to remove products from products array based on the input product ID
+    //creating method to remove products from a product array based on the input product ID
     public void deleteProduct(String productId) {
         boolean productDeleted=false;
         for(int i=0; i<products.size(); i++){
-            if(Objects.equals(products.get(i).getProductId(), productId)){
+            if(Objects.equals(products.get(i).getProductID(), productId)){
                 products.remove(i);
                 productDeleted=true;
                 System.out.println("Product "+productId+" successfully deleted!");
@@ -181,7 +181,7 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
 // ---------------- 3.Print product list ----------------
     //creating method to print products array to string
     public void printProductList() {
-        Collections.sort(products, Comparator.comparing(Product::getProductId));
+        products.sort(Comparator.comparing(Product::getProductID));
         if(products.isEmpty()){
             System.out.println("No products to display!");
         }
@@ -190,34 +190,13 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
         }
     }
 
-// ---------------- 4.Save to File ----------------
-    //creating method to save products array to outside file
-    public void saveToFile(ArrayList<Product> products, String fileName) {
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))){
-            oos.writeObject(products);
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-    //creating method to load saved products array data from outside file
-    public ArrayList<Product> loadFromFile(String fileName){
-        ArrayList<Product> products = new ArrayList<>();
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(fileName))) {
-            products = (ArrayList<Product>) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return products;
-    }
-
 // ---------------- 6.Open GUI ----------------
     //creating method to handle user account related data
     public User userAccount(){
         User userAccount=null;
         Scanner scanner = new Scanner(System.in);
         while(true) {
-            //giving user the option to login to previously registered accounts and create new accounts
+            //giving user the option to log in to previously registered accounts and create new accounts
             System.out.println("""
                     Select option:
                         1.Login to user account
@@ -247,100 +226,88 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
     public User userLogin(){
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter username:");
-        String usrNm = scanner.nextLine();
+        String username = scanner.nextLine();
         System.out.print("Enter password:");
-        String pswrd = scanner.nextLine();
+        String password = scanner.nextLine();
 
-        boolean loggedIn=false;
         boolean accFound=false;
         User user = null;
         //checking username and password
-        for(int i=0; i<users.size(); i++){
-            if(Objects.equals(users.get(i).getUsername(), usrNm)){
-                accFound=true;
-                if(!Objects.equals(users.get(i).getPassword(), pswrd)){
+        for (User value : users) {
+            if (Objects.equals(value.getUsername(), username)) {
+                accFound = true;
+                if (!Objects.equals(value.getPassword(), password)) {
                     System.out.println("Incorrect password!");
-                    user=null;
-                }
-                else {
-                    user=users.get(i);
+                } else {
+                    user = value;
                     System.out.println("Successfully logged in!");
                 }
                 break;
             }
         }
-        //informing user of account not existing
+        //informing user of an account not existing
         if (!accFound) {
             System.out.println("Account not found!");
-            user=null;
         }
         return user;
     }
-    //creating method to create user account
+    //creating method to create a user account
     public User userCreation(){
         Scanner scanner = new Scanner(System.in);
         //getting new username and password
-        String usrNm;
-        //making sure of availability of username
+        String username;
+        //making sure of the availability of username
         while(true){
             System.out.print("Enter new username:");
-            usrNm = scanner.nextLine();
+            username = scanner.nextLine();
             boolean usrAva = true;
-            for(int i=0;i<users.size();i++){
-                if(Objects.equals(usrNm, users.get(i).getUsername())){
-                    usrAva=false;
+            for (User user : users) {
+                if (Objects.equals(username, user.getUsername())) {
+                    usrAva = false;
+                    break;
                 }
             }
             if(!usrAva){
-                System.out.println("Username not available!\nPlease try again.");
+                System.out.println("Username is already taken! Please try again.");
             }else{break;}
         }
         //getting new password
         System.out.print("Enter new password:");
-        String pswrd = scanner.nextLine();
-        //creating new account
-        User newUser = new User(usrNm,pswrd);
+        String password = scanner.nextLine();
+        //creating a new account
+        User newUser = new User(username, password);
         System.out.println("Successfully create account!\n" +
-                "   Account username is "+usrNm+
-                "   Account password is "+pswrd);
+                "   Account username is "+ username +
+                "   Account password is "+ password);
         users.add(newUser);
-        saveAccounts(users);
+        SerializationAndDeserialization.saveAccounts(users);
         return newUser;
     }
-    //creating method to save account details to an external file
-    public void saveAccounts(ArrayList<User> users){
-        try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("userAccounts.dat"))){
-            oos.writeObject(users);
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-    //creating method to loading user accounts from external file
-    public ArrayList<User> loadAccounts(){
-        ArrayList<User> users = new ArrayList<>();
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("userAccounts.dat"))) {
-            users = (ArrayList<User>) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return users;
-    }
-    //creating method to sort products based on product ID and return sorted array
+
+    //creating method to sort products based on product ID and return a sorted array
     public static ArrayList<Product> getProductsArray(){
-        Collections.sort(products, Comparator.comparing(Product::getProductId));
+        products.sort(Comparator.comparing(Product::getProductID));
         return products;
     }
 
-    public void waitTime(){
+    private static void waitTime(int time){
         try {
-            Thread.sleep(1000); // Pause for 1 second (1000 milliseconds)
+            Thread.sleep(time); // Pause for 1 second (1000 milliseconds)
         }catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
+    public static void loadingAnim(int time){
+        waitTime(time);
+        System.out.print(".");
+        waitTime(time);
+        System.out.print(".");
+        waitTime(time);
+        System.out.println(".");
+        waitTime(time);
+    }
 
-    public static String checkID(ArrayList<Product> products){
+    public String checkID(ArrayList<Product> products){
         Scanner scanner = new Scanner(System.in);
         String productID;
 
@@ -349,7 +316,7 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
             boolean isValid = true;
 
             for (Product product : products) {
-                if (Objects.equals(product.getProductId(), productID) || productID.isEmpty()) {
+                if (Objects.equals(product.getProductID(), productID) || productID.isEmpty()) {
                     isValid = false;
                     break;
                 }
@@ -363,5 +330,3 @@ public class WestministerShoppingManager implements ShoppingManager, Serializabl
         } while (true);
     }
 }
-
-

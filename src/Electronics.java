@@ -5,13 +5,13 @@
 //implementing electronics child class of product class
 public class Electronics extends Product{
     //encapsulating class attributes
-private String brand;
-private String warrantyPeriod;
+private final String brand;
+private final String warrantyPeriod;
 //creating class constructor
-    public Electronics(String prdId, String prdNm, int avlAmt, double prc, String brnd, String warntPrd) {
-        super(prdId, prdNm, avlAmt, prc);
-        brand = brnd;
-        warrantyPeriod = warntPrd;
+    public Electronics(String productID, String productName, int availableAmount, double prc, String brand, String warrantyPeriod) {
+        super(productID, productName, availableAmount, prc);
+        this.brand = brand;
+        this.warrantyPeriod = warrantyPeriod;
     }
     //overriding superclass methods
     @Override
@@ -24,7 +24,7 @@ private String warrantyPeriod;
     }
     @Override
     public String getProductDetails(){
-        return "Product Id: "+getProductId()+"\nCategory: Clothing\n" +
+        return "Product Id: "+ getProductID()+"\nCategory: Clothing\n" +
                 "Name: "+getProductName()+"\n" +
                 "Brand: "+brand+"\nItem warranty: "+warrantyPeriod+"\nItems Available: "+getAvailableAmount();
     }

@@ -1,6 +1,5 @@
 package utils;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class InputValidation {
@@ -58,16 +57,16 @@ public class InputValidation {
 
     public static String warrantyValidation(){
         Scanner scanner = new Scanner(System.in);
-        String warntPrd;
+        String warrantyPeriod;
         while(true){
-            warntPrd = scanner.nextLine();
+            warrantyPeriod = scanner.nextLine();
             //validating user input meets requirements
-            if((warntPrd.contains("years" )|| warntPrd.contains("months"))||(warntPrd.contains("weeks" ))){
+            if((warrantyPeriod.contains("years" )|| warrantyPeriod.contains("months"))||(warrantyPeriod.contains("weeks" ))){
                 break;
             }else{
                 System.out.print("Invalid input!\nPlease enter in \"x years\", \"y months\" or \"z weeks\" form : ");
             }
         }
-        return warntPrd;
+        return warrantyPeriod;
     }
 }
