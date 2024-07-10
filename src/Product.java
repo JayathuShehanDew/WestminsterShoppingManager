@@ -8,7 +8,7 @@ public abstract class Product implements Serializable {
     //encapsulating class data
     private final String productID;
     private final String productName;
-    private final int availableAmount;
+    private int availableAmount;
     private final double price;
     private int quantityBought=0;
     //creating class constructor
@@ -30,6 +30,12 @@ public abstract class Product implements Serializable {
     public int getAvailableAmount() {
         return this.availableAmount;
     }
+
+    //creating method to set available number of products
+    public void setAvailableAmount(int availableAmount) {
+        this.availableAmount = availableAmount;
+    }
+
     //creating method to get product name of products
     public String getProductName(){
         return this.productName;

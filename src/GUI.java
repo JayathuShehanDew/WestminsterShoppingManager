@@ -5,148 +5,136 @@
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-
-//implementing the main GUI of the system
-public class GUI extends JFrame implements ActionListener{
-    //encapsulating and initializing class attributes
+public class GUI extends JFrame implements ActionListener {
     private static ArrayList<Product> productList;
-    private static ArrayList<Product> currentList;
+    static ArrayList<Product> currentList;
     private final JTextArea textArea = new JTextArea("");
     private final JButton shoppingCartBtn = new JButton("Shopping Cart");
     private final JButton addToShoppingCartBtn = new JButton("Add to Shopping Cart");
-    private final JComboBox productType;
+    private final JComboBox<String> productType;
     private final DefaultTableModel tableModel;
     private int tableShow = 0;
-    private int selectedRow=0;
+    private int selectedRow = 0;
     private final User user;
     private Product selectedProductWhole;
-//creating main JFrame of the GUI
     JFrame mainFrame = new JFrame();
-    public GUI(User currentUser){
-        //getting product array and user array
-    productList= WestminsterShoppingManager.getProductsArray();
-    user=currentUser;
-//setting up main frame
+
+    public GUI(User currentUser) {
+        productList = WestminsterShoppingManager.getProductsArray();
+        user = currentUser;
         mainFrame.setTitle("Westminster Shopping Centre");
-        mainFrame.setSize(700,700);
+        mainFrame.setSize(700, 700);
         mainFrame.setVisible(true);
         mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainFrame.setLayout(null);
-        //making frame un-resizable for easier handling of components
         mainFrame.setResizable(false);
-        //dividing the main frame into two, upper and lower parts for better implementation
         JPanel topPanel = new JPanel();
-        topPanel.setPreferredSize(new Dimension(700,350));
-        topPanel.setBounds(0,0,700,350);
+        topPanel.setPreferredSize(new Dimension(700, 350));
+        topPanel.setBounds(0, 0, 700, 350);
         topPanel.setLayout(null);
-        //adding a top panel to main frame
         mainFrame.add(topPanel);
-        //adding "select product category" label to a top panel
         JLabel label1 = new JLabel("Select Product Category");
         topPanel.add(label1);
-        label1.setBounds(10,25,200,20);
-        //creating combo box for category options
-        String[] prdTypes = {"All","Electronics","Clothing"};
-        productType = new JComboBox(prdTypes);
+        label1.setBounds(10, 25, 200, 20);
+        String[] productTypes = {"All", "Electronics", "Clothing"};
+        productType = new JComboBox<>(productTypes);
         productType.addActionListener(this);
-        //adding combo box to a top panel
         topPanel.add(productType);
-        productType.setBounds(220,20,200,30);
-        //adding shopping cart button to top panel
+        productType.setBounds(220, 20, 200, 30);
         topPanel.add(shoppingCartBtn);
-        shoppingCartBtn.setPreferredSize(new Dimension(100,20));
+        shoppingCartBtn.setPreferredSize(new Dimension(100, 20));
         shoppingCartBtn.setFocusable(false);
-        shoppingCartBtn.setBounds(450,20,200,30);
-        //adding event listeners to get user input
+        shoppingCartBtn.setBounds(450, 20, 200, 30);
         shoppingCartBtn.addActionListener(this);
-        //creating default table for products
-        tableModel = new DefaultTableModel();
+        tableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make cells non-editable
+            }
+        };
         tableModel.addColumn("Product ID");
         tableModel.addColumn("Name");
         tableModel.addColumn("Category");
         tableModel.addColumn("Price(£)");
         tableModel.addColumn("Info");
-        //adding table rows
         addTableRows(tableShow);
-        //adding a table model as a JTable
         JTable productsTable = new JTable(tableModel);
         productsTable.setRowHeight(60);
-        //creating Scrollable JTable
+        productsTable.setDefaultRenderer(Object.class, new CustomCellRenderer());
+
+        // Set selection mode to select rows
+        productsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        productsTable.setRowSelectionAllowed(true);
+        productsTable.setColumnSelectionAllowed(false);
+
         JScrollPane scrollPane = new JScrollPane(productsTable);
         topPanel.add(scrollPane);
-        scrollPane.setBounds(10,60,670,280);
-
-        //creating product details sections
-        ListSelectionModel model= productsTable.getSelectionModel();
-        //adding event listener to get user selection from JTable
+        scrollPane.setBounds(10, 60, 670, 280);
+        ListSelectionModel model = productsTable.getSelectionModel();
         model.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                //checking if user selection is empty
-                if(!model.isSelectionEmpty()){
-                    //getting user selected row number
+                if (!model.isSelectionEmpty()) {
+                    addToShoppingCartBtn.setEnabled(true);
                     selectedRow = model.getMinSelectionIndex();
-                    //adding selected products details to text area
                     textArea.setText(getSelectedRowText(selectedRow));
                 }
             }
         });
-        //creating bottom panel of main frame
         JPanel bottomPanel = new JPanel();
-        bottomPanel.setPreferredSize(new Dimension(700,350));
-        bottomPanel.setBounds(0,350,700,350);
+        bottomPanel.setPreferredSize(new Dimension(700, 350));
+        bottomPanel.setBounds(0, 350, 700, 350);
         bottomPanel.setLayout(null);
-        //adding bottom panel to main frame
         mainFrame.add(bottomPanel);
-        //adding 'selected products - details' label
         JLabel label2 = new JLabel("Selected Product - Details");
         bottomPanel.add(label2);
-        label2.setFont(new Font("Calibri",Font.BOLD,18));
-        label2.setBounds(30,5, 300, 30);
-        //adding text area for product details
+        label2.setFont(new Font("Calibri", Font.BOLD, 18));
+        label2.setBounds(30, 5, 300, 30);
         bottomPanel.add(textArea);
-        textArea.setBounds(30,35,600,200);
-        textArea.setFont(new Font("Calibri",Font.PLAIN,18));
+        textArea.setBounds(30, 35, 600, 200);
+        textArea.setFont(new Font("Calibri", Font.PLAIN, 18));
         textArea.setBackground(null);
-        //adding add to shopping cart button to a bottom panel
         bottomPanel.add(addToShoppingCartBtn);
-        addToShoppingCartBtn.setPreferredSize(new Dimension(100,20));
+        addToShoppingCartBtn.setPreferredSize(new Dimension(100, 20));
         addToShoppingCartBtn.setFocusable(false);
-        addToShoppingCartBtn.setBounds(200,280,300,30);
-        //adding event listeners to get user input when selecting add to a cart option
+        addToShoppingCartBtn.setBounds(200, 280, 300, 30);
         addToShoppingCartBtn.addActionListener(this);
     }
-    //creating actionPerformed class to respond to user inputs
-    public void actionPerformed(ActionEvent e){
-        if(e.getSource()==shoppingCartBtn){
-//            mainFrame.dispose();
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == shoppingCartBtn) {
             new ShoppingCartGUI(user);
-        } else if (e.getSource()==productType) {
-            tableShow=productType.getSelectedIndex();
-            int m =tableModel.getRowCount();
-            for(int i=0; i<m; i++){
+        } else if (e.getSource() == productType) {
+            tableShow = productType.getSelectedIndex();
+            int m = tableModel.getRowCount();
+            for (int i = 0; i < m; i++) {
                 tableModel.removeRow(0);
             }
             addTableRows(tableShow);
-        }else if (e.getSource()==addToShoppingCartBtn){
-            user.addToUserCart(selectedProductWhole);
+        } else if (e.getSource() == addToShoppingCartBtn) {
+            if (selectedProductWhole.getAvailableAmount() != 0) {
+                user.addToUserCart(selectedProductWhole);
+                selectedProductWhole.setAvailableAmount(selectedProductWhole.getAvailableAmount() - 1);
+            }
+            textArea.setText(getSelectedRowText(selectedRow));
         }
     }
-    //creating method to filter products based on category
-    public ArrayList<Product> getProducts(int ProductType){
+
+    public ArrayList<Product> getProducts(int ProductType) {
         ArrayList<Product> temp = new ArrayList<>();
-        switch (ProductType){
-            case 0:{
+        switch (ProductType) {
+            case 0: {
                 temp.addAll(productList);
                 break;
             }
-            case 1:{
+            case 1: {
                 for (Product product : productList) {
                     if (product instanceof Electronics) {
                         temp.add(product);
@@ -154,7 +142,7 @@ public class GUI extends JFrame implements ActionListener{
                 }
                 break;
             }
-            case 2:{
+            case 2: {
                 for (Product product : productList) {
                     if (product instanceof Clothing) {
                         temp.add(product);
@@ -165,11 +153,10 @@ public class GUI extends JFrame implements ActionListener{
         }
         return temp;
     }
-    //creating method to add table rows to productsTable
-    public void addTableRows(int productType){
+
+    public void addTableRows(int productType) {
         ArrayList<Product> tempArray = getProducts(productType);
         currentList = getProducts(productType);
-        //creates a list with the row data and adds the list to the table
         String[] list = new String[5];
         for (Product product : tempArray) {
             list[0] = product.getProductID();
@@ -177,14 +164,32 @@ public class GUI extends JFrame implements ActionListener{
             list[2] = product.getType();
             list[3] = String.valueOf(product.getPrice());
             list[4] = product.getInfo();
-
             tableModel.addRow(list);
         }
     }
-    //creating method to get product details of the selected row of productsTable
-    public String getSelectedRowText(int rowNumber){
+
+    public String getSelectedRowText(int rowNumber) {
         Product selectedProduct = currentList.get(rowNumber);
-        selectedProductWhole=selectedProduct;
+        selectedProductWhole = selectedProduct;
+        if (selectedProduct.getAvailableAmount() == 0)
+            addToShoppingCartBtn.setEnabled(false);
         return selectedProduct.getProductDetails();
+    }
+}
+
+class CustomCellRenderer extends DefaultTableCellRenderer {
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        Product product = GUI.currentList.get(row);
+        if (product.getAvailableAmount() < 3) {
+            cell.setBackground(Color.RED);
+        } else {
+            cell.setBackground(Color.WHITE);
+        }
+        if (isSelected) {
+            cell.setBackground(table.getSelectionBackground());
+        }
+        return cell;
     }
 }
