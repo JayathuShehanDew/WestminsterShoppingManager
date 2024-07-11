@@ -3,8 +3,8 @@
 //Name  : D. K. J. S. Dewmina
 
 import utils.InputValidation;
-
 import java.util.*;
+
 public class WestminsterShoppingManager implements ShoppingManager {
     //initializing static arraylists to hold entered products and registered users.
     //encapsulating class data
@@ -40,8 +40,9 @@ public class WestminsterShoppingManager implements ShoppingManager {
                     if(products.size()<50){
                         getProductDetails();
                     }else {
-                        System.out.println("Sorry! maximum amount of products reached.\n" +
-                                "Delete unwanted products to input new products.");
+                        System.out.print("Sorry! maximum amount of products reached.\n" +
+                                "Delete unwanted products to input new products");
+                        loadingAnim(200);
                     }
                     break;
                 }
@@ -132,7 +133,8 @@ public class WestminsterShoppingManager implements ShoppingManager {
                 break;
             }
         }
-        System.out.println("New product added!");
+        System.out.print("New product added!");
+        loadingAnim(200);
     }
 
     //method to create and add clothing to products array
@@ -152,7 +154,8 @@ public class WestminsterShoppingManager implements ShoppingManager {
         Scanner scanner = new Scanner(System.in);
         //checking whether product to be deleted exists
         if(products.isEmpty()){
-            System.out.println("No products to delete!");
+            System.out.print("No products to delete!");
+            loadingAnim(200);
         }
         else {
             System.out.print("Enter product Id of product to delete: ");
@@ -168,13 +171,15 @@ public class WestminsterShoppingManager implements ShoppingManager {
             if(Objects.equals(products.get(i).getProductID(), productId)){
                 products.remove(i);
                 productDeleted=true;
-                System.out.println("Product "+productId+" successfully deleted!");
+                System.out.print("Product "+productId+" successfully deleted!");
+                loadingAnim(200);
                 break;
             }
         }
         //informing user about product based on given ID not existing
         if (!productDeleted) {
-            System.out.println("Product "+productId+" not found!");
+            System.out.print("Product "+productId+" not found!");
+            loadingAnim(200);
         }
     }
 
@@ -183,7 +188,8 @@ public class WestminsterShoppingManager implements ShoppingManager {
     public void printProductList() {
         products.sort(Comparator.comparing(Product::getProductID));
         if(products.isEmpty()){
-            System.out.println("No products to display!");
+            System.out.print("No products to display!");
+            loadingAnim(200);
         }
         for (Product product : products) {
             System.out.println(product.toString());
@@ -203,6 +209,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
                         2.Create new account""");
             System.out.print("Enter your choice : ");
             String option = scanner.nextLine();
+            System.out.println();
             //using switch to implement user login and account creation
             switch (option) {
                 case "1": {
@@ -215,7 +222,8 @@ public class WestminsterShoppingManager implements ShoppingManager {
                     break;
                 }
                 default:
-                    System.out.println("Invalid input! Please try again...");
+                    System.out.print("Invalid input! Please try again");
+                    loadingAnim(200);
             }
             if (option.equals("1") || option.equals("2"))
                 break;
@@ -225,9 +233,9 @@ public class WestminsterShoppingManager implements ShoppingManager {
     //creating user login method
     public User userLogin(){
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter username:");
+        System.out.print("Enter username : ");
         String username = scanner.nextLine();
-        System.out.print("Enter password:");
+        System.out.print("Enter password : ");
         String password = scanner.nextLine();
 
         boolean accFound=false;
@@ -237,7 +245,8 @@ public class WestminsterShoppingManager implements ShoppingManager {
             if (Objects.equals(value.getUsername(), username)) {
                 accFound = true;
                 if (!Objects.equals(value.getPassword(), password)) {
-                    System.out.println("Incorrect password!");
+                    System.out.print("Incorrect password");
+                    loadingAnim(200);
                 } else {
                     user = value;
                     System.out.println("Successfully logged in!");
@@ -247,7 +256,8 @@ public class WestminsterShoppingManager implements ShoppingManager {
         }
         //informing user of an account not existing
         if (!accFound) {
-            System.out.println("Account not found!");
+            System.out.print("Account not found");
+            loadingAnim(200);
         }
         return user;
     }
@@ -268,11 +278,12 @@ public class WestminsterShoppingManager implements ShoppingManager {
                 }
             }
             if(!usrAva){
-                System.out.println("Username is already taken! Please try again.");
+                System.out.print("Username is already taken! Please try again");
+                loadingAnim(200);
             }else{break;}
         }
         //getting new password
-        System.out.print("Enter new password:");
+        System.out.print("Enter new password : ");
         String password = scanner.nextLine();
         //creating a new account
         User newUser = new User(username, password);

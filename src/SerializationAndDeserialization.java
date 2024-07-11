@@ -17,7 +17,8 @@ public class SerializationAndDeserialization {
             out.close();
             fileOut.close();
 
-            System.out.println("Saved successfully");
+            System.out.print("Saved successfully");
+            WestminsterShoppingManager.loadingAnim(200);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -53,7 +54,8 @@ public class SerializationAndDeserialization {
             out.close();
             fileOut.close();
 
-            System.out.println("Account Saved successfully");
+            System.out.print("Account Saved successfully");
+            WestminsterShoppingManager.loadingAnim(200);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
